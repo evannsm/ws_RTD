@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Redirecting…</title>
+  <meta name="robots" content="noindex">
+  <script>
+    (function () {
+      var base = '/ws_RTD';
+      var path = window.location.pathname || '/';
+      var suffix = path.indexOf(base) === 0 ? path.slice(base.length) : path;
+      if (!suffix || suffix.charAt(0) !== '/') suffix = '/' + suffix;
+      var target = 'https://evannsmc.github.io/ws_RTD' + suffix
+                 + (window.location.search || '')
+                 + (window.location.hash || '');
+      window.location.replace(target);
+    })();
+  </script>
+  <meta http-equiv="refresh" content="2; url=https://evannsmc.github.io/ws_RTD/">
+  <link rel="canonical" href="https://evannsmc.github.io/ws_RTD/">
+</head>
+<body>
+  <p>This page has moved. Redirecting to
+    <a href="https://evannsmc.github.io/ws_RTD/">https://evannsmc.github.io/ws_RTD/</a>…</p>
+  <p>If the automatic redirect fails, replace <code>evannsm.github.io</code> with
+    <code>evannsmc.github.io</code> in the URL.</p>
+</body>
+</html>
