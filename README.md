@@ -1,42 +1,44 @@
-# redirect_evannsm
+# redirect shim for evannsm → evannsmc
 
-A redirect-only GitHub Pages site that forwards every request under
-`https://evannsm.github.io/ws_RTD/*` to the matching URL under
-`https://evannsmc.github.io/ws_RTD/*`.
+I renamed my GitHub from `evannsm` to `evannsmc`, which broke the links in a
+paper I already submitted. This repo is the dumb little static site that lives
+at the old URL and bounces visitors to the new one.
 
-## Why
+Old: `https://evannsm.github.io/ws_RTD/...`
+New: `https://evannsmc.github.io/ws_RTD/...`
 
-The GitHub username `evannsm` was renamed to `evannsmc`. A recently submitted
-paper contains links of the form `https://evannsm.github.io/ws_RTD/...` that
-now point to a dead site. This repo restores those links by hosting a static
-redirect shim at the old URL.
+## What's in here
 
-## How it works
-
-- `index.html` — `<meta http-equiv="refresh">` + canonical to the new site root.
-- `installation.html`, `case_studies.html`, `api_reference.html` — per-page
-  meta-refresh redirects matching the top-level docs from
-  `ws_RTD/_frozen_docs/docs/*.md`.
-- `404.html` — JavaScript catch-all. For any path GitHub Pages can't find, it
-  rewrites `window.location.pathname` onto `evannsmc.github.io`, preserving
-  query string and hash. This covers the Doxygen-generated pages (classes,
-  namespaces, files, etc.) without enumerating them.
-- `.nojekyll` — serve files verbatim.
+- `index.html` — meta-refresh to the new site root, with a `<link rel="canonical">`
+  so crawlers carry the ranking over.
+- `installation.html`, `case_studies.html`, `api_reference.html` — one meta-refresh
+  per page (matching the top-level `.md` files in `ws_RTD/_frozen_docs/docs/`). These
+  give a 200 response, which is better for SEO than the 404 fallback.
+- `404.html` — JS catch-all. GitHub Pages serves this for any path that isn't
+  explicitly a file in the repo. The script rewrites `window.location.pathname`
+  onto `evannsmc.github.io`, preserving the query string and hash. This is what
+  handles all the Doxygen-generated pages (`classes.html`, `namespaces.html`, etc.)
+  without me having to enumerate them.
+- `.nojekyll` — don't let Pages touch the files.
+- `.github/workflows/pages.yml` — deploys on push to `main`.
 
 ## Deploy
 
-1. Push this repo to **`github.com/evannsm/ws_RTD`** (the `evannsm` account,
-   repo name `ws_RTD` — required so the URL path matches).
-2. On GitHub: **Settings → Pages → Source: Deploy from a branch**,
-   branch `main`, folder `/` (root).
-3. Wait for Pages to build, then confirm:
-   - `https://evannsm.github.io/ws_RTD/` → `evannsmc.github.io/ws_RTD/`
-   - `https://evannsm.github.io/ws_RTD/installation.html` → new installation page
-   - `https://evannsm.github.io/ws_RTD/classes.html` (or any Doxygen page) →
-     redirects via `404.html`
+Pushing to `main` on `evannsm/ws_RTD` triggers the workflow. First time only:
 
-## Adding more pages
+1. Settings → Pages → **Source: GitHub Actions**.
+2. Push anything; the `pages.yml` workflow builds and deploys.
+3. Deployed URL shows up in the Actions run summary.
 
-If you want an explicit meta-refresh for another page (instead of relying on
-the 404 catch-all), copy one of the existing `<name>.html` files and update
-the three occurrences of the page name.
+## Sanity checks after deploy
+
+- `https://evannsm.github.io/ws_RTD/` → hits `index.html` → new root.
+- `https://evannsm.github.io/ws_RTD/installation.html` → explicit page redirect.
+- `https://evannsm.github.io/ws_RTD/classes.html` (or any Doxygen page) → bounces
+  through `404.html`.
+
+## Adding another explicit page
+
+Copy one of the per-page files and replace the three occurrences of the page name.
+Only worth doing for pages that are actually cited somewhere (the 404 fallback covers
+the rest — the only difference is SEO signal).

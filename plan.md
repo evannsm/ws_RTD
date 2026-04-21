@@ -25,5 +25,8 @@
 - [x] Write per-page meta-refresh HTMLs for known `.md` pages.
 - [x] Add `.nojekyll`.
 - [x] Rewrite `README.md` with purpose + deploy steps.
-- [ ] User action: push to `github.com/evannsm/ws_RTD`, enable Pages (main branch, `/` root).
+- [x] Push to `github.com/evannsm/ws_RTD` (remote already configured as `github-evannsm:evannsm/ws_RTD`).
+- [x] Switch deploy to GitHub Actions: add `.github/workflows/pages.yml`.
+- [x] Rewrite README in first-person / notes-to-self voice.
+- [ ] User action: Settings → Pages → **Source: GitHub Actions** (one-time toggle).
 - [ ] User action: visit `https://evannsm.github.io/ws_RTD/installation.html` to verify.
